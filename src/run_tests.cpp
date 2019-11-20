@@ -26,123 +26,125 @@ class MyKeyComparator {
 int main ( void )
 {
     // Creates a test manager for the DAL class.
-    TestManager tm{ "DAL<int, string> Suite" };
+    TestManager tm{ "DAL <int, string> Suite" };
 
     {
         //=== Test #1
         std::string test_id{"DefaultCtro"};
         REGISTER( tm, test_id, "Testing the default constructor." );
-        // Testing default constructor.
+        // // Testing default constructor.
         DAL<int , std::string > dic;
-        // EXPECT_EQUAL( tm, test_id,   dic.capacity(), 50 );
+        EXPECT_EQUAL( tm, test_id,   dic.capacity(), 50);
     }
-    // {
-    //     //=== Test #2
-    //     auto test_id{ "CtroSize" };
-    //     REGISTER( tm, test_id, "Testing the constructor that receives a size." );
-    //     DAL<int, std::string> dic2(100);
-    //     EXPECT_EQUAL( tm, test_id,   dic2.capacity(), 100 );
-    // }
+    {
+        //=== Test #2
+        auto test_id{ "CtroSize" };
+        REGISTER( tm, test_id, "Testing the constructor that receives a size." );
+        DAL<int, std::string> dic2(100);
+        EXPECT_EQUAL( tm, test_id,   dic2.capacity(), 100 );
+    }
 
-    // {
-    //     // Testing insert.
-    //     DAL<int, std::string, MyKeyComparator> dict(3);
-    //     auto test_id{ "InsertRegular" };
-    //     REGISTER( tm, test_id, "Testing the regular insert." );
-    //     // testing the regular insert
-    //     auto result1 =  dict.insert( 1, "AAA" ) ;
-    //     auto result2 =  dict.insert( 2, "BBB" ) ;
-    //     EXPECT_TRUE ( tm, test_id, result1 and result2 );
-    // }
+    {
+        // Testing insert.
+        DAL<int, std::string, MyKeyComparator> dict(3);
+        auto test_id{ "InsertRegular" };
+        REGISTER( tm, test_id, "Testing the regular insert." );
+        // testing the regular insert
+        auto result1 =  dict.insert( 1, "AAA" ) ;
+        auto result2 =  dict.insert( 2, "BBB" ) ;
+        EXPECT_TRUE ( tm, test_id, result1 and result2 );
+    }
 
-    // {
-    //     auto test_id{ "InsertDuplicate" };
-    //     REGISTER( tm, test_id, "Testing the insert failure when we insert a duplicate key." );
-    //     DAL<int, std::string, MyKeyComparator> dict(3);
-    //     auto result1 =  dict.insert( 1, "AAA" ) ;
-    //     auto result2 =  dict.insert( 2, "BBB" ) ;
-    //     EXPECT_TRUE( tm, test_id, result1 and result2 );
-    //     // Testing the insert failure for duplicate keys.
-    //     EXPECT_FALSE( tm, test_id, dict.insert( 2, "CCC" ) );
-    // }
+    {
+        auto test_id{ "InsertDuplicate" };
+        REGISTER( tm, test_id, "Testing the insert failure when we insert a duplicate key." );
+        DAL<int, std::string, MyKeyComparator> dict(3);
+        auto result1 =  dict.insert( 1, "AAA" ) ;
+        auto result2 =  dict.insert( 2, "BBB" ) ;
+        EXPECT_TRUE( tm, test_id, result1 and result2 );
+        // Testing the insert failure for duplicate keys.
+        EXPECT_FALSE( tm, test_id, dict.insert( 2, "CCC" ) );
+    }
 
-    // {
-    //     // Testing the insert for overflow check.
-    //     auto test_id{ "InsertOverflow" };
-    //     REGISTER( tm, test_id, "Testing the insert indication of overflow when we exceed the dictionary limit." );
-    //     DAL<int, std::string, MyKeyComparator> dict(3);
-    //     auto result1 =  dict.insert( 1, "AAA" ) ;
-    //     auto result2 =  dict.insert( 2, "BBB" ) ;
-    //     auto result8 = ( dict.insert( 3, "CCC" ) );
-    //     EXPECT_TRUE( tm, test_id, result1 and result2 and result8 );
-    //     // Trying to insert an extra item.
-    //     // The dictionary may return false if it's a static version,
-    //     // or true, if it's a dynamic version.
-    //     auto old_size = dict.capacity();
-    //     auto result4 = dict.insert( 4, "DDD" );
-    //     if ( result4 == true ) // Dynamic version.
-    //         EXPECT_TRUE( tm, test_id,   dict.capacity() > old_size );
-    //     else
-    //         EXPECT_FALSE( tm, test_id,   result4  ); // static dictionary
-    // }
+    {
+        // Testing the insert for overflow check.
+        auto test_id{ "InsertOverflow" };
+        REGISTER( tm, test_id, "Testing the insert indication of overflow when we exceed the dictionary limit." );
+        DAL<int, std::string, MyKeyComparator> dict(3);
+        auto result1 =  dict.insert( 1, "AAA" ) ;
+        auto result2 =  dict.insert( 2, "BBB" ) ;
+        auto result8 = ( dict.insert( 3, "CCC" ) );
+        EXPECT_TRUE( tm, test_id, result1 and result2 and result8 );
+        // Trying to insert an extra item.
+        // The dictionary may return false if it's a static version,
+        // or true, if it's a dynamic version.
+        auto old_size = dict.capacity();
+        std::cout<<dict.capacity() << std::endl;
+        auto result4 = dict.insert( 4, "DDD" );
+        if ( result4 == true ) // Dynamic version.
+            EXPECT_TRUE( tm, test_id,   dict.capacity() > old_size );
+        else
+            EXPECT_FALSE( tm, test_id,   result4  ); // static dictionary
+    }
 
-    // {
-    //     // Testing search.
-    //     DAL<int, std::string> dict;
-    //     std::string result;
+    {
+        // Testing search.
+        DAL<int, std::string> dict;
+        std::string result;
 
-    //     // The Data
-    //     struct Entry
-    //     {
-    //         int key;
-    //         std::string data;
-    //     } table[] =
-    //     {
-    //         { 1, "AAA" },
-    //         { 2, "BBB" },
-    //         { 3, "CCC" },
-    //         { 4, "DDD" },
-    //         { 5, "EEE" }
-    //     };
+        // The Data
+        struct Entry
+        {
+            int key;
+            std::string data;
+        } table[] =
+        {
+            { 1, "AAA" },
+            { 2, "BBB" },
+            { 3, "CCC" },
+            { 4, "DDD" },
+            { 5, "EEE" }
+        };
 
-    //     auto test_id{ "SearchingBasic" };
-    //     REGISTER( tm, test_id, "Testing basic searching.");
-    //     bool passed{ false };
-    //     // insert all itens first.
-    //     for ( const auto & e : table )
-    //     {
-    //         passed = dict.insert( e.key, e.data ) ;
-    //         if ( not passed ) break;
-    //     }
-    //     EXPECT_TRUE( tm, test_id,  passed );
+        auto test_id{ "SearchingBasic" };
+        REGISTER( tm, test_id, "Testing basic searching.");
+        bool passed{ false };
+        // insert all itens first.
+        for ( const auto & e : table )
+        {
+            passed = dict.insert( e.key, e.data ) ;
+            if ( not passed ) break;
+        }
+        EXPECT_TRUE( tm, test_id,  passed );
 
-    //     // retrieve itens
-    //     passed = false;
-    //     for ( const auto & e : table )
-    //     {
-    //         passed = ( dict.search( e.key, result ) );
-    //         if ( not passed ) break;
-    //         passed = ( result == e.data );
-    //         if ( not passed ) break;
-    //     }
-    //     EXPECT_TRUE( tm, test_id,  passed );
+        // retrieve itens
+        passed = false;
+        for ( const auto & e : table )
+        {
+            passed = ( dict.search( e.key, result ) );
+            if ( not passed ) break;
+            passed = ( result == e.data );
+            if ( not passed ) break;
+            std::cout<<"oi"<<std::endl;
+        }
+        EXPECT_TRUE( tm, test_id,  passed );
 
-    //     {
-    //         auto test_id{ "SearchingInexisting" };
-    //         REGISTER( tm, test_id, "Trying to retrieve an inexisting element from the dictionary.");
-    //         // serching for non-existing key.
-    //         EXPECT_FALSE( tm, test_id,    ( dict.search( 6, result ) ) );
-    //     }
+        {
+            auto test_id{ "SearchingInexisting" };
+            REGISTER( tm, test_id, "Trying to retrieve an inexisting element from the dictionary.");
+            // serching for non-existing key.
+            EXPECT_FALSE( tm, test_id,    ( dict.search( 6, result ) ) );
+        }
 
-    // }
-    // {
-    //     std::string result;
-    //     auto test_id{ "SearchingEmpty" };
-    //     REGISTER( tm, test_id, "Searching in an empty dictionary.");
-    //     // seaching in an empty dictionary.
-    //     DAL<int, std::string> dict;
-    //     EXPECT_FALSE( tm, test_id, ( dict.search( 1, result)  ) ) ;
-    // }
+    }
+    {
+        std::string result;
+        auto test_id{ "SearchingEmpty" };
+        REGISTER( tm, test_id, "Searching in an empty dictionary.");
+        // seaching in an empty dictionary.
+        DAL<int, std::string> dict;
+        EXPECT_FALSE( tm, test_id, ( dict.search( 1, result)  ) ) ;
+    }
 
     // {
     //     // Testing remove.
@@ -588,8 +590,8 @@ int main ( void )
     //     EXPECT_EQUAL( tm2, test_id, key, i );
     // }
 
-    // tm.summary();
-    // std::cout << std::endl;
+    tm.summary();
+    std::cout << std::endl;
     // tm2.summary();
     return EXIT_SUCCESS;
 }
