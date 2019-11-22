@@ -71,11 +71,51 @@ class DAL
         	}
         	return false;
         }
+        bool empty (void) const{
+        	if(size() == 0){
+        		return true;
+        	}
+        	return false;
+        }
+       	size_t size (void) const{
+        	return m_length;
+        }
+        KeyType min (void) const{
+        	if(empty()){
+        		throw std::out_of_range("INVALID");
+
+        	}
+        	KeyType minor;
+        	minor = m_array[0].first;
+        	KeyTypeLess comp;  
+        	for(size_t i = 0 ; i < m_length;i++){
+        		if(comp(m_array[i].first, minor)){
+        			minor = m_array[i].first;
+        		}
+        	}
+        	return minor;
+        }
+         KeyType max (void) const{
+         	if(empty()){
+        		throw std::out_of_range("INVALID");
+        	
+        	}
+        	KeyType major;
+        	major = m_array[0].first;
+        	KeyTypeLess comp;  
+        	for(size_t i = 0 ; i < m_length;i++){
+        		if(comp(major, m_array[i].first)){
+        			major = m_array[i].first;
+        		}
+        	}
+        	return major;
+        }
+  
         //=== modifier members.
         bool insert(const KeyType & _newKey, const DataType & _newInfo){
-        	if(m_length = m_capacity - 1)
+        	if(m_length == m_capacity){
         		resize();
-
+			}
         	for(size_t i = 0 ; i < m_length ; i++){
         		if(_newKey == m_array[i].first){
         			m_array[i].second = _newInfo;
@@ -86,9 +126,26 @@ class DAL
         	m_length++;
         	return true;
         }
+        bool remove(const KeyType & _newKey, DataType & _newInfo){
+        	if(empty())
+        		return false; 
+
+        	for(size_t i = 0 ; i < m_length; i++){
+        		if(_newKey == m_array[i].first){
+        			_newInfo = m_array[i].second;
+        			m_array[i] = m_array[m_length-1];
+        			m_array[m_length] = {KeyType(), DataType()};
+        			m_length--;
+        			return true;
+        		}
+
+        	}
+        	return false;
+        }
         void resize(){
         	std::unique_ptr<entry_type []> temp;
         	m_capacity = 2*m_capacity;
+
 			temp.reset( new entry_type[m_capacity]);
 			for(size_t i = 0; i<m_capacity/2;i++){
 				temp[i] = m_array[i];

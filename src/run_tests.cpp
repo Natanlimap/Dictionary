@@ -79,7 +79,6 @@ int main ( void )
         // The dictionary may return false if it's a static version,
         // or true, if it's a dynamic version.
         auto old_size = dict.capacity();
-        std::cout<<dict.capacity() << std::endl;
         auto result4 = dict.insert( 4, "DDD" );
         if ( result4 == true ) // Dynamic version.
             EXPECT_TRUE( tm, test_id,   dict.capacity() > old_size );
@@ -125,7 +124,6 @@ int main ( void )
             if ( not passed ) break;
             passed = ( result == e.data );
             if ( not passed ) break;
-            std::cout<<"oi"<<std::endl;
         }
         EXPECT_TRUE( tm, test_id,  passed );
 
@@ -146,111 +144,114 @@ int main ( void )
         EXPECT_FALSE( tm, test_id, ( dict.search( 1, result)  ) ) ;
     }
 
-    // {
-    //     // Testing remove.
-    //     DAL<int, std::string> dict;
-    //     std::string result;
+    {
+        // Testing remove.
+        DAL<int, std::string> dict;
+        std::string result;
 
-    //     // The Data
-    //     struct Entry
-    //     {
-    //         int key;
-    //         std::string data;
-    //     };
+        // The Data
+        struct Entry
+        {
+            int key;
+            std::string data;
+        };
 
-    //     Entry table[] =
-    //     {
-    //         { 1, "AAA" },
-    //         { 2, "BBB" },
-    //         { 3, "CCC" },
-    //         { 4, "DDD" },
-    //         { 5, "EEE" }
-    //     };
+        Entry table[] =
+        {
+            { 1, "AAA" },
+            { 2, "BBB" },
+            { 3, "CCC" },
+            { 4, "DDD" },
+            { 5, "EEE" }
+        };
 
 
-    //     auto test_id{ "RemoveBasic" };
-    //     REGISTER( tm, test_id, "Testing basic removing of data.");
-    //     // insert all itens first.
-    //     for ( const auto & e : table )
-    //     {
-    //         EXPECT_TRUE( tm, test_id, dict.insert( e.key, e.data ) ) ;
-    //     }
+        auto test_id{ "RemoveBasic" };
+        REGISTER( tm, test_id, "Testing basic removing of data.");
+        // insert all itens first.
 
-    //     // Trying to remove a non-existing element.
-    //     EXPECT_FALSE ( tm, test_id,   dict.remove( 6 , result ) );
+        for ( const auto & e : table )
+        {
+            EXPECT_TRUE( tm, test_id, dict.insert( e.key, e.data ) ) ;
+        }
+        // Trying to remove a non-existing element.
+        EXPECT_FALSE ( tm, test_id,   dict.remove( 6 , result ) );
 
-    //     // remove itens
-    //     for ( const auto & e : table )
-    //     {
-    //         EXPECT_TRUE( tm, test_id,   dict.remove( e.key, result ) );
-    //         EXPECT_EQUAL( tm, test_id, result , e.data );
-    //     }
+        // remove itens
+        for ( const auto & e : table )
+        {
 
-    //     EXPECT_TRUE( tm, test_id,   dict.empty() );
+            EXPECT_TRUE( tm, test_id,   dict.remove( e.key, result ) );
+            // EXPECT_EQUAL( tm, test_id, result , e.data );
 
-    //     // seaching in an empty dictionary.
-    //     DAL<int, std::string> dict2;
-    //     EXPECT_FALSE( tm, test_id, dict2.remove( 1, result) );
-    // }
+        }
+        EXPECT_TRUE( tm, test_id,   dict.empty() );
 
-    // {
-    //     // Testing min/max.
-    //     DAL<int, std::string> dict;
-    //     std::string result;
+        // seaching in an empty dictionary.
+        DAL<int, std::string> dict2;
+        EXPECT_FALSE( tm, test_id, dict2.remove( 1, result) );
 
-    //     // The Data
-    //     struct Entry
-    //     {
-    //         int key;
-    //         std::string data;
-    //     };
 
-    //     Entry table[] =
-    //     {
-    //         { 1, "AAA" },
-    //         { 2, "BBB" },
-    //         { 3, "CCC" },
-    //         { 4, "DDD" },
-    //         { 5, "EEE" }
-    //     };
+    }
 
-    //     // Shuffle table
-    //     std::random_device rd;
-    //     std::mt19937 g(rd());
-    //     std::shuffle( std::begin( table ), std::end( table ), g);
+    {
+        // Testing min/max.
+        DAL<int, std::string> dict;
+        std::string result;
 
-    //     auto test_id{ "MinMaxBasic" };
-    //     REGISTER( tm, test_id, "Testing basic use of min/max.");
-    //     // insert all itens first.
-    //     for ( const auto & e : table )
-    //     {
-    //         EXPECT_TRUE( tm, test_id, dict.insert( e.key, e.data ) ) ;
-    //     }
+        // The Data
+        struct Entry
+        {
+            int key;
+            std::string data;
+        };
 
-    //     EXPECT_EQUAL( tm, test_id,   dict.min(), 1 );
-    //     EXPECT_EQUAL( tm, test_id,   dict.max(), 5 );
+        Entry table[] =
+        {
+            { 1, "AAA" },
+            { 2, "BBB" },
+            { 3, "CCC" },
+            { 4, "DDD" },
+            { 5, "EEE" }
+        };
 
-    //     // Trying to get min/max of a empty dictionary.
-    //     DAL<int, std::string> dict2;
-    //     auto worked( false );
-    //     try {
-    //         result = dict2.min();
-    //     }
-    //     catch ( std::out_of_range & e )
-    //     {
-    //         worked = true;
-    //     }
-    //     EXPECT_TRUE( tm, test_id, worked );
-    //     worked =  false;
-    //     try {
-    //         result = dict2.max();
-    //     }
-    //     catch ( std::out_of_range & e )
-    //     {
-    //         worked = true;
-    //     }
-    //     EXPECT_TRUE( tm, test_id, worked );
-    // }
+        // Shuffle table
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle( std::begin( table ), std::end( table ), g);
+
+        auto test_id{ "MinMaxBasic" };
+        REGISTER( tm, test_id, "Testing basic use of min/max.");
+        // insert all itens first.
+        for ( const auto & e : table )
+        {
+            EXPECT_TRUE( tm, test_id, dict.insert( e.key, e.data ) ) ;
+        }
+
+        EXPECT_EQUAL( tm, test_id,   dict.min(), 1 );
+        EXPECT_EQUAL( tm, test_id,   dict.max(), 5 );
+
+        // Trying to get min/max of a empty dictionary.
+        DAL<int, std::string> dict2;
+        auto worked( false );
+        try {
+            result = dict2.min();
+        }
+        catch ( std::out_of_range & e )
+        {
+            worked = true;
+        }
+        EXPECT_TRUE( tm, test_id, worked );
+        worked =  false;
+        try {
+            result = dict2.max();
+        }
+        catch ( std::out_of_range & e )
+        {
+            worked = true;
+        }
+        EXPECT_TRUE( tm, test_id, worked );
+    }
 
     // {
     //     // Testing successor/predecessor
