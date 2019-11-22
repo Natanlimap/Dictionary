@@ -110,7 +110,38 @@ class DAL
         	}
         	return major;
         }
-  
+        bool predecessor (const KeyType & _mKey, KeyType & _newKey){
+        	if(empty() or size() == 1 or min() == _mKey){
+        		return false;
+        	}
+        	KeyTypeLess pred;
+        	size_t count;
+        	count = 0;
+        	_newKey = min();
+        	while(count < m_length){
+        		if(pred(_newKey, m_array[count].first) and pred(m_array[count].first, _mKey)){
+        			_newKey = m_array[count].first;
+        		}
+        		count++;
+        	}
+        	return true;
+        }
+         bool successor (const KeyType & _mKey, KeyType & _newKey){
+        	if(empty() or size() == 1 or max() == _mKey){
+        		return false;
+        	}
+        	KeyTypeLess suce;
+        	size_t count;
+        	count = 0;
+        	_newKey = max();
+        	while(count < m_length){
+        		if(suce(m_array[count].first, _newKey) and suce(_mKey, m_array[count].first)){
+        			_newKey = m_array[count].first;
+        		}
+        		count++;
+        	}
+        	return true;
+  		}
         //=== modifier members.
         bool insert(const KeyType & _newKey, const DataType & _newInfo){
         	if(m_length == m_capacity){

@@ -253,62 +253,62 @@ int main ( void )
         EXPECT_TRUE( tm, test_id, worked );
     }
 
-    // {
-    //     // Testing successor/predecessor
-    //     DAL<int, std::string> dict;
-    //     std::string result;
+    {
+        // Testing successor/predecessor
+        DAL<int, std::string> dict;
+        std::string result;
 
-    //     // The Data
-    //     struct Entry
-    //     {
-    //         int key;
-    //         std::string data;
-    //     };
+        // The Data
+        struct Entry
+        {
+            int key;
+            std::string data;
+        };
 
-    //     Entry table[] =
-    //     {
-    //         { 1, "AAA" },
-    //         { 2, "BBB" },
-    //         { 3, "CCC" },
-    //         { 4, "DDD" },
-    //         { 5, "EEE" }
-    //     };
+        Entry table[] =
+        {
+            { 1, "AAA" },
+            { 2, "BBB" },
+            { 3, "CCC" },
+            { 4, "DDD" },
+            { 5, "EEE" }
+        };
 
-    //     // Shuffle table
-    //     std::random_device rd;
-    //     std::mt19937 g(rd());
-    //     std::shuffle( std::begin( table ), std::end( table ), g);
+        // Shuffle table
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle( std::begin( table ), std::end( table ), g);
 
-    //     auto test_id{ "SucePredBasic" };
-    //     REGISTER( tm, test_id, "Testing basic use of successor/predecessor.");
-    //     // insert all itens first.
-    //     for ( const auto & e : table )
-    //     {
-    //         EXPECT_TRUE( tm, test_id, dict.insert( e.key, e.data ) ) ;
-    //     }
+        auto test_id{ "SucePredBasic" };
+        REGISTER( tm, test_id, "Testing basic use of successor/predecessor.");
+        // insert all itens first.
+        for ( const auto & e : table )
+        {
+            EXPECT_TRUE( tm, test_id, dict.insert( e.key, e.data ) ) ;
+        }
 
-    //     auto key { dict.min() };
-    //     int next_key{0};
-    //     int i{1};
-    //     while( dict.successor( key, next_key ) )
-    //     {
-    //         EXPECT_EQUAL( tm, test_id, key, i++ );
-    //         // go to the next key.
-    //         key = next_key;
-    //     }
-    //     EXPECT_EQUAL( tm, test_id, key, i );
+        auto key { dict.min() };
+        int next_key{0};
+        int i{1};
+        while( dict.successor( key, next_key ) )
+        {
+            EXPECT_EQUAL( tm, test_id, key, i++ );
+            // go to the next key.
+            key = next_key;
+        }
+        EXPECT_EQUAL( tm, test_id, key, i );
 
-    //     key = dict.max();
-    //     next_key = 0;
-    //     i = 5;
-    //     while( dict.predecessor( key, next_key ) )
-    //     {
-    //         EXPECT_EQUAL( tm, test_id, key, i-- );
-    //         // go to the next key.
-    //         key = next_key;
-    //     }
-    //     EXPECT_EQUAL( tm, test_id, key, i );
-    // }
+        key = dict.max();
+        next_key = 0;
+        i = 5;
+        while( dict.predecessor( key, next_key ) )
+        {
+            EXPECT_EQUAL( tm, test_id, key, i-- );
+            // go to the next key.
+            key = next_key;
+        }
+        EXPECT_EQUAL( tm, test_id, key, i );
+    }
 
     // // Creates a test manager for the DSAL class.
     // TestManager tm2{ "DSAL<int, string> Suite" };
