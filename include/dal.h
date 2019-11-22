@@ -195,32 +195,32 @@ class DAL
  * @tparam DataType Tha data type to be stored in the dictionary.
  * @tparam KeyTypeLess A functor/function pointer that compares two keys for strict order <.
  */
-// template < typename KeyType, typename DataType, typename KeyTypeLess = std::less< KeyType > >
-// class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
-// {
-//     private:
-//         /// Returns true and retrive in the second parameter the index of the requested key and returns true; false, otherwise.
-//         bool find_index( const KeyType &, size_t & ) const; // Metodo de search auxiliar.
+template < typename KeyType, typename DataType, typename KeyTypeLess = std::less< KeyType > >
+class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
+{
+    private:
+        /// Returns true and retrive in the second parameter the index of the requested key and returns true; false, otherwise.
+        bool find_index( const KeyType &, size_t & ) const; // Metodo de search auxiliar.
 
-//     public:
-//         //=== special methods
-//         /// Default constructor
-//         DSAL( size_t capacity_ = DAL<KeyType, DataType, KeyTypeLess>::SIZE ) : DAL<KeyType, DataType, KeyTypeLess>( capacity_ ) { /* Empty */ };
-//         /// Destructor
-//         virtual ~DSAL() { // TODO /* Empty */ };
-//         /// Copy constructor
-//         DSAL ( const DSAL & );
-//         /// Move constructor
-//         DSAL ( DSAL && );
-//         /// Assignment operator
-//         DSAL & operator= ( DSAL );
-//         /// Move assignment operator
-//         DSAL & operator= ( DSAL && );
+    public:
+        //=== special methods
+        /// Default constructor
+        DSAL( size_t capacity_ = DAL< KeyType, DataType, KeyTypeLess>::SIZE ) : DAL<KeyType, DataType, KeyTypeLess>( capacity_ ) { /* Empty */ };
+        /// Destructor
+        virtual ~DSAL() { /* Empty */ };
+        /// Copy constructor
+        DSAL ( const DSAL & );
+        /// Move constructor
+        DSAL ( DSAL && );
+        /// Assignment operator
+        DSAL & operator= ( DSAL );
+        /// Move assignment operator
+        DSAL & operator= ( DSAL && );
 
-//         //=== modifiers overwritten methods.
+        //=== modifiers overwritten methods.
 
-//         //=== Acessor members
-// };
+        //=== Acessor members
+};
 
 // #include "dal.inl" // This is to get "implementation" from another file.
 #endif
