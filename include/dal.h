@@ -50,13 +50,25 @@ class DAL
         	m_array.release();
         }
         /// Copy constructor
-        DAL ( const DAL & );
+        DAL ( const DAL & other){
+        	m_array.reset(new entry_type[other.m_capacity]);
+        	m_length = other.m_length;
+        	for(size_t i = 0 ; i < other.m_capacity; i++){
+        		m_array[i] = other.m_array[i];
+        	}
+        }
         /// Move constructor
-        DAL ( DAL && );
+        // DAL ( DAL && );
         /// Assignment operator
-        DAL & operator= ( DAL );
+        DAL & operator= ( DAL other){
+        m_length = other.m_length;
+        m_array.reset(new entry_type[other.m_capacity]);
+        for(size_t i = 0 ; i < other.m_capacity; i++){
+        		m_array[i] = other.m_array[i];
+        	}
+        }
         /// Move assignment operator
-        DAL & operator= ( DAL && );
+        // DAL & operator= ( DAL && );
         //=== status members
         size_t 	capacity (void) const {
         	return m_capacity;
@@ -209,17 +221,24 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         /// Destructor
         virtual ~DSAL() { /* Empty */ };
         /// Copy constructor
-        DSAL ( const DSAL & );
+        DSAL ( const DSAL & other){
+        	DSAL::m_capacity = other.m_capacity;
+        	DSAL::m_length = other.m_length;
+        	this = DAL<KeyType, DataType, KeyTypeLess>(other);
+        }
         /// Move constructor
-        DSAL ( DSAL && );
+        // DSAL ( DSAL && );
         /// Assignment operator
         DSAL & operator= ( DSAL );
         /// Move assignment operator
-        DSAL & operator= ( DSAL && );
+        // DSAL & operator= ( DSAL && );
 
         //=== modifiers overwritten methods.
-
+     
         //=== Acessor members
+        size_t capacity (void) const {
+        	return DSAL::m_capacity;
+        }
 };
 
 // #include "dal.inl" // This is to get "implementation" from another file.
