@@ -155,7 +155,7 @@ class DAL
         	return true;
   		}
         //=== modifier members.
-        bool insert(const KeyType & _newKey, const DataType & _newInfo){
+        virtual bool insert(const KeyType & _newKey, const DataType & _newInfo){
         	if(m_length == m_capacity){
         		resize();
 			}
@@ -217,7 +217,10 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
     public:
         //=== special methods
         /// Default constructor
-        DSAL( size_t capacity_ = DAL< KeyType, DataType, KeyTypeLess>::SIZE ) : DAL<KeyType, DataType, KeyTypeLess>( capacity_ ) { /* Empty */ };
+        DSAL( size_t capacity_ = DAL< KeyType, DataType, KeyTypeLess>::SIZE ) : DAL<KeyType, DataType, KeyTypeLess>( capacity_ ) {
+        DSAL::m_capacity = capacity_;
+        DSAL::m_length = 0;	
+        };
         /// Destructor
         virtual ~DSAL() { /* Empty */ };
         /// Copy constructor
@@ -234,6 +237,40 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         // DSAL & operator= ( DSAL && );
 
         //=== modifiers overwritten methods.
+       bool insert(const KeyType & _newKey, const DataType & _newInfo){
+        	KeyTypeLess teste;
+        	//VERIFICANDO SE ESTA CHEIO
+        	if(DSAL::m_length == DSAL::m_capacity){
+        		DSAL::resize();
+			}
+			//VERIFICANDO SE ESTA VAZIO
+			if(DSAL::empty()){
+				DSAL::m_array[0] = {_newKey, _newInfo};
+        		DSAL::m_length++;
+        		return true;
+			}
+			//CHECANDO SE A CHAVE JA EXISTE
+        	for(size_t i = 0 ; i < DSAL::m_length; ++i){
+        		if(_newKey == DSAL::m_array[i].first){
+        		std::cout<<"ENTREI"<<std::endl;
+         			DSAL::m_array[i].second = _newInfo;
+        			return false;
+        		}
+        	}
+        	//COMO NAO EXISTE, IREMOS INSERIR NO SEU DEVIDO LUGAR
+        	for(size_t i = 0 ; i < DSAL::m_length; ++i){
+        		if(teste(_newKey, DSAL::m_array[i].first)){
+        			for(size_t j = DSAL::m_length; j > i;j--){
+        				DSAL::m_array[j] = DSAL::m_array[j-1];
+        			}
+        			DSAL::m_array[i] = {_newKey, _newInfo};
+        		}
+
+        			DSAL::m_length++;
+        			return true;
+        	}
+        		
+        }
      
         //=== Acessor members
         size_t capacity (void) const {

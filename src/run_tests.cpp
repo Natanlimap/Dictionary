@@ -381,225 +381,225 @@ int main ( void )
             EXPECT_FALSE( tm2, test_id,   result4  ); // static dictionary
     }
 
-    {
-        // Testing search.
-        DSAL<int, std::string> dict;
-        std::string result;
+    // {
+    //     // Testing search.
+    //     DSAL<int, std::string> dict;
+    //     std::string result;
 
-        // The Data
-        struct Entry
-        {
-            int key;
-            std::string data;
-        } table[] =
-        {
-            { 1, "AAA" },
-            { 2, "BBB" },
-            { 3, "CCC" },
-            { 4, "DDD" },
-            { 5, "EEE" }
-        };
+    //     // The Data
+    //     struct Entry
+    //     {
+    //         int key;
+    //         std::string data;
+    //     } table[] =
+    //     {
+    //         { 1, "AAA" },
+    //         { 2, "BBB" },
+    //         { 3, "CCC" },
+    //         { 4, "DDD" },
+    //         { 5, "EEE" }
+    //     };
 
-        auto test_id{ "SearchingBasic" };
-        REGISTER( tm2, test_id, "Testing basic searching.");
-        bool passed{ false };
-        // insert all itens first.
-        for ( const auto & e : table )
-        {
-            passed = dict.insert( e.key, e.data ) ;
-            if ( not passed ) break;
-        }
-        EXPECT_TRUE( tm2, test_id,  passed );
+    //     auto test_id{ "SearchingBasic" };
+    //     REGISTER( tm2, test_id, "Testing basic searching.");
+    //     bool passed{ false };
+    //     // insert all itens first.
+    //     for ( const auto & e : table )
+    //     {
+    //         passed = dict.insert( e.key, e.data ) ;
+    //         if ( not passed ) break;
+    //     }
+    //     EXPECT_TRUE( tm2, test_id,  passed );
 
-        // retrieve itens
-        passed = false;
-        for ( const auto & e : table )
-        {
-            passed = ( dict.search( e.key, result ) );
-            if ( not passed ) break;
-            passed = ( result == e.data );
-            if ( not passed ) break;
-        }
-        EXPECT_TRUE( tm2, test_id,  passed );
+    //     // retrieve itens
+    //     passed = false;
+    //     for ( const auto & e : table )
+    //     {
+    //         passed = ( dict.search( e.key, result ) );
+    //         if ( not passed ) break;
+    //         passed = ( result == e.data );
+    //         if ( not passed ) break;
+    //     }
+    //     EXPECT_TRUE( tm2, test_id,  passed );
 
-        {
-            auto test_id{ "SearchingInexisting" };
-            REGISTER( tm2, test_id, "Trying to retrieve an inexisting element from the dictionary.");
-            // serching for non-existing key.
-            EXPECT_FALSE( tm2, test_id,    ( dict.search( 6, result ) ) );
-        }
-    }
-    {
-        std::string result;
-        auto test_id{ "SearchingEmpty" };
-        REGISTER( tm2, test_id, "Searching in an empty dictionary.");
-        // seaching in an empty dictionary.
-        DSAL<int, std::string> dict;
-        EXPECT_FALSE( tm2, test_id, ( dict.search( 1, result)  ) ) ;
-    }
+    //     {
+    //         auto test_id{ "SearchingInexisting" };
+    //         REGISTER( tm2, test_id, "Trying to retrieve an inexisting element from the dictionary.");
+    //         // serching for non-existing key.
+    //         EXPECT_FALSE( tm2, test_id,    ( dict.search( 6, result ) ) );
+    //     }
+    // }
+    // {
+    //     std::string result;
+    //     auto test_id{ "SearchingEmpty" };
+    //     REGISTER( tm2, test_id, "Searching in an empty dictionary.");
+    //     // seaching in an empty dictionary.
+    //     DSAL<int, std::string> dict;
+    //     EXPECT_FALSE( tm2, test_id, ( dict.search( 1, result)  ) ) ;
+    // }
 
-    {
-        // Testing remove.
-        DSAL<int, std::string> dict;
-        std::string result;
+    // {
+    //     // Testing remove.
+    //     DSAL<int, std::string> dict;
+    //     std::string result;
 
-        // The Data
-        struct Entry
-        {
-            int key;
-            std::string data;
-        };
+    //     // The Data
+    //     struct Entry
+    //     {
+    //         int key;
+    //         std::string data;
+    //     };
 
-        Entry table[] =
-        {
-            { 1, "AAA" },
-            { 2, "BBB" },
-            { 3, "CCC" },
-            { 4, "DDD" },
-            { 5, "EEE" }
-        };
+    //     Entry table[] =
+    //     {
+    //         { 1, "AAA" },
+    //         { 2, "BBB" },
+    //         { 3, "CCC" },
+    //         { 4, "DDD" },
+    //         { 5, "EEE" }
+    //     };
 
 
-        auto test_id{ "RemoveBasic" };
-        REGISTER( tm2, test_id, "Testing basic removing of data.");
-        // insert all itens first.
-        for ( const auto & e : table )
-        {
-            EXPECT_TRUE( tm2, test_id, dict.insert( e.key, e.data ) ) ;
-        }
+    //     auto test_id{ "RemoveBasic" };
+    //     REGISTER( tm2, test_id, "Testing basic removing of data.");
+    //     // insert all itens first.
+    //     for ( const auto & e : table )
+    //     {
+    //         EXPECT_TRUE( tm2, test_id, dict.insert( e.key, e.data ) ) ;
+    //     }
 
-        // Trying to remove a non-existing element.
-        EXPECT_FALSE ( tm2, test_id,   dict.remove( 6 , result ) );
+    //     // Trying to remove a non-existing element.
+    //     EXPECT_FALSE ( tm2, test_id,   dict.remove( 6 , result ) );
 
-        // remove itens
-        for ( const auto & e : table )
-        {
-            EXPECT_TRUE( tm2, test_id,   dict.remove( e.key, result ) );
-            EXPECT_EQUAL( tm2, test_id, result , e.data );
-        }
+    //     // remove itens
+    //     for ( const auto & e : table )
+    //     {
+    //         EXPECT_TRUE( tm2, test_id,   dict.remove( e.key, result ) );
+    //         EXPECT_EQUAL( tm2, test_id, result , e.data );
+    //     }
 
-        EXPECT_TRUE( tm2, test_id,   dict.empty() );
+    //     EXPECT_TRUE( tm2, test_id,   dict.empty() );
 
-        // seaching in an empty dictionary.
-        DSAL<int, std::string> dict2;
-        EXPECT_FALSE( tm2, test_id, dict2.remove( 1, result) );
-    }
+    //     // seaching in an empty dictionary.
+    //     DSAL<int, std::string> dict2;
+    //     EXPECT_FALSE( tm2, test_id, dict2.remove( 1, result) );
+    // }
 
-    {
-        // Testing min/max.
-        DSAL<int, std::string> dict;
-        std::string result;
+    // {
+    //     // Testing min/max.
+    //     DSAL<int, std::string> dict;
+    //     std::string result;
 
-        // The Data
-        struct Entry
-        {
-            int key;
-            std::string data;
-        };
+    //     // The Data
+    //     struct Entry
+    //     {
+    //         int key;
+    //         std::string data;
+    //     };
 
-        Entry table[] =
-        {
-            { 1, "AAA" },
-            { 2, "BBB" },
-            { 3, "CCC" },
-            { 4, "DDD" },
-            { 5, "EEE" }
-        };
+    //     Entry table[] =
+    //     {
+    //         { 1, "AAA" },
+    //         { 2, "BBB" },
+    //         { 3, "CCC" },
+    //         { 4, "DDD" },
+    //         { 5, "EEE" }
+    //     };
 
-        // Shuffle table
-        std::random_device rd;
-        std::mt19937 g(rd());
-        std::shuffle( std::begin( table ), std::end( table ), g);
+    //     // Shuffle table
+    //     std::random_device rd;
+    //     std::mt19937 g(rd());
+    //     std::shuffle( std::begin( table ), std::end( table ), g);
 
-        auto test_id{ "MinMaxBasic" };
-        REGISTER( tm2, test_id, "Testing basic use of min/max.");
-        // insert all itens first.
-        for ( const auto & e : table )
-        {
-            EXPECT_TRUE( tm2, test_id, dict.insert( e.key, e.data ) ) ;
-        }
+    //     auto test_id{ "MinMaxBasic" };
+    //     REGISTER( tm2, test_id, "Testing basic use of min/max.");
+    //     // insert all itens first.
+    //     for ( const auto & e : table )
+    //     {
+    //         EXPECT_TRUE( tm2, test_id, dict.insert( e.key, e.data ) ) ;
+    //     }
 
-        EXPECT_EQUAL( tm2, test_id,   dict.min(), 1 );
-        EXPECT_EQUAL( tm2, test_id,   dict.max(), 5 );
+    //     EXPECT_EQUAL( tm2, test_id,   dict.min(), 1 );
+    //     EXPECT_EQUAL( tm2, test_id,   dict.max(), 5 );
 
-        // Trying to get min/max of a empty dictionary.
-        DSAL<int, std::string> dict2;
-        auto worked( false );
-        try {
-            result = dict2.min();
-        }
-        catch ( std::out_of_range & e )
-        {
-            worked = true;
-        }
-        EXPECT_TRUE( tm2, test_id, worked );
-        worked =  false;
-        try {
-            result = dict2.max();
-        }
-        catch ( std::out_of_range & e )
-        {
-            worked = true;
-        }
-        EXPECT_TRUE( tm2, test_id, worked );
-    }
+    //     // Trying to get min/max of a empty dictionary.
+    //     DSAL<int, std::string> dict2;
+    //     auto worked( false );
+    //     try {
+    //         result = dict2.min();
+    //     }
+    //     catch ( std::out_of_range & e )
+    //     {
+    //         worked = true;
+    //     }
+    //     EXPECT_TRUE( tm2, test_id, worked );
+    //     worked =  false;
+    //     try {
+    //         result = dict2.max();
+    //     }
+    //     catch ( std::out_of_range & e )
+    //     {
+    //         worked = true;
+    //     }
+    //     EXPECT_TRUE( tm2, test_id, worked );
+    // }
 
-    {
-        // Testing successor/predecessor
-        DSAL<int, std::string> dict;
-        std::string result;
+    // {
+    //     // Testing successor/predecessor
+    //     DSAL<int, std::string> dict;
+    //     std::string result;
 
-        // The Data
-        struct Entry
-        {
-            int key;
-            std::string data;
-        };
+    //     // The Data
+    //     struct Entry
+    //     {
+    //         int key;
+    //         std::string data;
+    //     };
 
-        Entry table[] =
-        {
-            { 1, "AAA" },
-            { 2, "BBB" },
-            { 3, "CCC" },
-            { 4, "DDD" },
-            { 5, "EEE" }
-        };
+    //     Entry table[] =
+    //     {
+    //         { 1, "AAA" },
+    //         { 2, "BBB" },
+    //         { 3, "CCC" },
+    //         { 4, "DDD" },
+    //         { 5, "EEE" }
+    //     };
 
-        // Shuffle table
-        std::random_device rd;
-        std::mt19937 g(rd());
-        std::shuffle( std::begin( table ), std::end( table ), g);
+    //     // Shuffle table
+    //     std::random_device rd;
+    //     std::mt19937 g(rd());
+    //     std::shuffle( std::begin( table ), std::end( table ), g);
 
-        auto test_id{ "SucePredBasic" };
-        REGISTER( tm2, test_id, "Testing basic use of successor/predecessor.");
-        // insert all itens first.
-        for ( const auto & e : table )
-        {
-            EXPECT_TRUE( tm2, test_id, dict.insert( e.key, e.data ) ) ;
-        }
+    //     auto test_id{ "SucePredBasic" };
+    //     REGISTER( tm2, test_id, "Testing basic use of successor/predecessor.");
+    //     // insert all itens first.
+    //     for ( const auto & e : table )
+    //     {
+    //         EXPECT_TRUE( tm2, test_id, dict.insert( e.key, e.data ) ) ;
+    //     }
 
-        auto key { dict.min() };
-        int next_key{0};
-        int i{1};
-        while( dict.successor( key, next_key ) )
-        {
-            EXPECT_EQUAL( tm2, test_id, key, i++ );
-            // go to the next key.
-            key = next_key;
-        }
-        EXPECT_EQUAL( tm2, test_id, key, i );
+    //     auto key { dict.min() };
+    //     int next_key{0};
+    //     int i{1};
+    //     while( dict.successor( key, next_key ) )
+    //     {
+    //         EXPECT_EQUAL( tm2, test_id, key, i++ );
+    //         // go to the next key.
+    //         key = next_key;
+    //     }
+    //     EXPECT_EQUAL( tm2, test_id, key, i );
 
-        key = dict.max();
-        next_key = 0;
-        i = 5;
-        while( dict.predecessor( key, next_key ) )
-        {
-            EXPECT_EQUAL( tm2, test_id, key, i-- );
-            // go to the next key.
-            key = next_key;
-        }
-        EXPECT_EQUAL( tm2, test_id, key, i );
-    }
+    //     key = dict.max();
+    //     next_key = 0;
+    //     i = 5;
+    //     while( dict.predecessor( key, next_key ) )
+    //     {
+    //         EXPECT_EQUAL( tm2, test_id, key, i-- );
+    //         // go to the next key.
+    //         key = next_key;
+    //     }
+    //     EXPECT_EQUAL( tm2, test_id, key, i );
+    // }
 
     tm.summary();
     std::cout << std::endl;
