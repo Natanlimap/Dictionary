@@ -33,4 +33,26 @@ uma ordem especificada por um dos 3 argumento-template. Desta forma, temos:
 2. **remoção** é feita em O(n) (deslocamento de memória); e
 3. **busca** é feita em O(log n) (busca binária).
 
--- The end
+## Executando os testes
+1. Entre na pasta SRC
+
+2. No terminal, use estes comandos:
+```sh
+g++ -std=c++11 run_tests.cpp -I ../include test_manager.cpp
+./a.out
+```
+## Os testes
+
+Esses testes devem mostrar se a classe foi implementada de forma correta.
+
+## Autor
+
+* **Natan Pereira** - (https://github.com/Natanlimap)
+
+## Projeto
+https://github.com/Natanlimap/HashTable
+
+## Agradecimentos
+Vale lembrar que apenas o arquivo "dal.h" é de minha autoria, os demais arquivos foram feitos pelo Professor Selan Rodrigues dos Santos da docente da UFRN. 
+
+
