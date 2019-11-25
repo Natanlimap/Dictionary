@@ -92,7 +92,7 @@ class DAL
        	size_t size (void) const{
         	return m_length;
         }
-        KeyType min (void) const{
+      virtual  KeyType min (void) const{
         	if(empty()){
         		throw std::out_of_range("INVALID");
 
@@ -107,7 +107,7 @@ class DAL
         	}
         	return minor;
         }
-         KeyType max (void) const{
+         virtual KeyType max (void) const{
          	if(empty()){
         		throw std::out_of_range("INVALID");
         	
@@ -122,7 +122,7 @@ class DAL
         	}
         	return major;
         }
-        bool predecessor (const KeyType & _mKey, KeyType & _newKey){
+        virtual bool predecessor (const KeyType & _mKey, KeyType & _newKey){
         	if(empty() or size() == 1 or min() == _mKey){
         		return false;
         	}
@@ -138,7 +138,7 @@ class DAL
         	}
         	return true;
         }
-         bool successor (const KeyType & _mKey, KeyType & _newKey){
+         virtual bool successor (const KeyType & _mKey, KeyType & _newKey){
         	if(empty() or size() == 1 or max() == _mKey){
         		return false;
         	}
@@ -169,7 +169,7 @@ class DAL
         	m_length++;
         	return true;
         }
-        bool remove(const KeyType & _newKey, DataType & _newInfo){
+        virtual bool remove(const KeyType & _newKey, DataType & _newInfo){
         	if(empty())
         		return false; 
 
@@ -185,7 +185,7 @@ class DAL
         	}
         	return false;
         }
-        void resize(){
+        virtual void resize(){
         	std::unique_ptr<entry_type []> temp;
         	m_capacity = 2*m_capacity;
 
@@ -212,7 +212,16 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
 {
     private:
         /// Returns true and retrive in the second parameter the index of the requested key and returns true; false, otherwise.
-        bool find_index( const KeyType &, size_t & ) const; // Metodo de search auxiliar.
+        bool find_index( const KeyType & _mKey, size_t & index) const{
+        	index = 0;
+        	for(size_t i = 0;i < this->m_length ; i++){
+        		if(this->m_array[i].first == _mKey){
+        			return true;
+        		}
+        		index++;
+        	}
+        
+        } // Metodo de search auxiliar.
 
     public:
         //=== special methods
@@ -237,39 +246,98 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         // DSAL & operator= ( DSAL && );
 
         //=== modifiers overwritten methods.
-       bool insert(const KeyType & _newKey, const DataType & _newInfo){
+        virtual bool predecessor (const KeyType & _mKey, KeyType & _newKey){
+        	if(this->empty() or this->size() == 1 or this->min() == _mKey){
+        		return false;
+        	}
+   			for(size_t i = 0;i < this->m_length;i++){
+   				if(_mKey == this->m_array[i].first){
+   					_newKey = this->m_array[i-1].first;
+   					return true;
+   				}
+   			}
+        	return false;
+        }
+          virtual bool sucessor (const KeyType & _mKey, KeyType & _newKey){
+        	if(this->empty() or this->size() == 1 or this->max() == _mKey){
+        		return false;
+        	}
+   			for(size_t i = 0;i < this->m_length;i++){
+   				if(_mKey == this->m_array[i].first){
+   					_newKey = this->m_array[i+1].first;
+   					return true;
+   				}
+   			}
+        	return false;
+        }
+        bool remove(const KeyType & _newKey, DataType & _newInfo){
+        	if(this->empty())
+        		return false; 
+
+        	for(size_t i = 0 ; i < this->m_length; i++){
+        		if(_newKey == this->m_array[i].first){
+        			_newInfo = this->m_array[i].second;
+        			this->m_array[this->m_length] = {KeyType(), DataType()};
+        			for(size_t j = i ; j < this->m_length ; j++){
+        				this->m_array[j] = this->m_array[j+1];
+        			}
+        			this->m_length--;
+        			return true;
+        		}
+
+        	}
+        	return false;
+        }
+        bool insert(const KeyType & _newKey, const DataType & _newInfo){
         	KeyTypeLess teste;
         	//VERIFICANDO SE ESTA CHEIO
-        	if(DSAL::m_length == DSAL::m_capacity){
-        		DSAL::resize();
+        	if(this->m_length == this->m_capacity){
+        		this->resize();
 			}
 			//VERIFICANDO SE ESTA VAZIO
-			if(DSAL::empty()){
-				DSAL::m_array[0] = {_newKey, _newInfo};
-        		DSAL::m_length++;
+			if(this->empty()){
+				this->m_array[0] = {_newKey, _newInfo};
+        		this->m_length++;
         		return true;
 			}
 			//CHECANDO SE A CHAVE JA EXISTE
-        	for(size_t i = 0 ; i < DSAL::m_length; ++i){
-        		if(_newKey == DSAL::m_array[i].first){
-        		std::cout<<"ENTREI"<<std::endl;
-         			DSAL::m_array[i].second = _newInfo;
+        	for(size_t i = 0 ; i < this->m_length; ++i){
+        		if(this->m_array[i].first==_newKey){
+         			this->m_array[i].second = _newInfo;
         			return false;
         		}
         	}
         	//COMO NAO EXISTE, IREMOS INSERIR NO SEU DEVIDO LUGAR
-        	for(size_t i = 0 ; i < DSAL::m_length; ++i){
-        		if(teste(_newKey, DSAL::m_array[i].first)){
-        			for(size_t j = DSAL::m_length; j > i;j--){
-        				DSAL::m_array[j] = DSAL::m_array[j-1];
+        	for(size_t i = this->m_length - 1; i >= 0; --i){
+        		if(teste(this->m_array[i].first, _newKey)){
+        			for(size_t j = this->m_length; j > i;j--){
+        				this->m_array[j] = this->m_array[j-1];
+
         			}
-        			DSAL::m_array[i] = {_newKey, _newInfo};
+        			this->m_array[i + 1] = {_newKey, _newInfo};
+        			this->m_length++;
+        			return true;
         		}
 
-        			DSAL::m_length++;
-        			return true;
         	}
         		
+        }
+
+
+       
+        virtual KeyType max (void) const{
+         	if(this->empty()){
+        		throw std::out_of_range("INVALID");
+        	
+        	}
+        	return this->m_array[this->m_length-1].first;
+        }
+         virtual KeyType min (void) const{
+         	if(this->empty()){
+        		throw std::out_of_range("INVALID");
+        	
+        	}
+        	return DSAL::m_array[0].first;
         }
      
         //=== Acessor members
