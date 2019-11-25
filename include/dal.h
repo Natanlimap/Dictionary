@@ -208,16 +208,25 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
 {
     private:
         /// Returns true and retrive in the second parameter the index of the requested key and returns true; false, otherwise.
-        bool find_index( const KeyType & _mKey, size_t & index) const{
-        	index = 0;
-        	for(size_t i = 0;i < this->m_length ; i++){
-        		if(this->m_array[i].first == _mKey){
-        			return true;
-        		}
-        		index++;
-        	}
-        	return false;
-        } // Metodo de search auxiliar.
+     bool find_index( const KeyType & _mKey, size_t & index) const{	 
+			index = 0;
+			KeyTypeLess test;
+			size_t begin = 0;
+			size_t end = this->m_length -1;
+			while (begin<=end) {
+				index = (begin + end)/2;
+				if (this->m_array[index].first == _mKey){
+					return true;
+				}else {
+					if (test(this->m_array[index].first, _mKey)){
+						begin = index +1;
+					}else{
+						end = index - 1;
+					}
+				}
+			}
+			return false;
+		}
 
     public:
         //=== special methods
