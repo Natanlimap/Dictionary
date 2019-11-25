@@ -53,6 +53,6 @@ Esses testes devem mostrar se a classe foi implementada de forma correta.
 https://github.com/Natanlimap/HashTable
 
 ## Agradecimentos
-Vale lembrar que apenas o arquivo "dal.h" é de minha autoria, os demais arquivos foram feitos pelo Professor Selan Rodrigues dos Santos da docente da UFRN. 
+Vale lembrar que apenas o arquivo "dal.h" é de minha autoria, os demais arquivos foram feitos pelo Professor Selan Rodrigues dos Santos, docente da UFRN. 
 
 
