@@ -57,9 +57,7 @@ class DAL
         		m_array[i] = other.m_array[i];
         	}
         }
-        /// Move constructor
-        // DAL ( DAL && );
-        /// Assignment operator
+
         DAL & operator= ( DAL other){
         m_length = other.m_length;
         m_array.reset(new entry_type[other.m_capacity]);
@@ -67,8 +65,6 @@ class DAL
         		m_array[i] = other.m_array[i];
         	}
         }
-        /// Move assignment operator
-        // DAL & operator= ( DAL && );
         //=== status members
         size_t 	capacity (void) const {
         	return m_capacity;
@@ -247,33 +243,8 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
        		 }
         }
         /// Move assignment operator
-        // DSAL & operator= ( DSAL && );
 
         //=== modifiers overwritten methods.
-        virtual bool predecessor (const KeyType & _mKey, KeyType & _newKey){
-        	if(this->empty() or this->size() == 1 or this->min() == _mKey){
-        		return false;
-        	}
-   			for(size_t i = 0;i < this->m_length;i++){
-   				if(_mKey == this->m_array[i].first){
-   					_newKey = this->m_array[i-1].first;
-   					return true;
-   				}
-   			}
-        	return false;
-        }
-          virtual bool sucessor (const KeyType & _mKey, KeyType & _newKey){
-        	if(this->empty() or this->size() == 1 or this->max() == _mKey){
-        		return false;
-        	}
-   			for(size_t i = 0;i < this->m_length;i++){
-   				if(_mKey == this->m_array[i].first){
-   					_newKey = this->m_array[i+1].first;
-   					return true;
-   				}
-   			}
-        	return false;
-        }
         bool remove(const KeyType & _newKey, DataType & _newInfo){
         	if(this->empty())
         		return false; 
@@ -292,24 +263,24 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         }
       bool insert(const KeyType & _newKey, const DataType & _newInfo){
         	KeyTypeLess teste;
-        	//VERIFICANDO SE ESTA CHEIO
+
         	if(this->m_length == this->m_capacity){
         		this->resize();
 			}
-			//VERIFICANDO SE ESTA VAZIO
+
 			if(this->empty()){
 				this->m_array[0] = {_newKey, _newInfo};
         		this->m_length++;
         		return true;
 			}
-			//CHECANDO SE A CHAVE JA EXISTE
+
         	for(size_t i = 0 ; i < this->m_length; ++i){
         		if(this->m_array[i].first==_newKey){
          			this->m_array[i].second = _newInfo;
         			return false;
         		}
         	}
-        	//COMO NAO EXISTE, IREMOS INSERIR NO SEU DEVIDO LUGAR
+
         	for(size_t i = 0 ; i < this->m_length; ++i){
         		if(teste(_newKey, this->m_array[i].first)){
         			for(size_t j = this->m_length; j > i;j--){
@@ -330,6 +301,7 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
 
 
        
+        //=== Acessor members
         virtual KeyType max (void) const{
          	if(this->empty()){
         		throw std::out_of_range("INVALID");
@@ -345,9 +317,33 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         	return DSAL::m_array[0].first;
         }
      
-        //=== Acessor members
         size_t capacity (void) const {
         	return DSAL::m_capacity;
+        }
+
+        virtual bool predecessor (const KeyType & _mKey, KeyType & _newKey){
+        	if(this->empty() or this->size() == 1 or this->min() == _mKey){
+        		return false;
+        	}
+   			for(size_t i = 0;i < this->m_length;i++){
+   				if(_mKey == this->m_array[i].first){
+   					_newKey = this->m_array[i-1].first;
+   					return true;
+   				}
+   			}
+        	return false;
+        }
+        virtual bool sucessor (const KeyType & _mKey, KeyType & _newKey){
+        	if(this->empty() or this->size() == 1 or this->max() == _mKey){
+        		return false;
+        	}
+   			for(size_t i = 0;i < this->m_length;i++){
+   				if(_mKey == this->m_array[i].first){
+   					_newKey = this->m_array[i+1].first;
+   					return true;
+   				}
+   			}
+        	return false;
         }
 };
 
