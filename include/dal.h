@@ -220,7 +220,7 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         		}
         		index++;
         	}
-        
+        	return false;
         } // Metodo de search auxiliar.
 
     public:
@@ -238,10 +238,14 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         	DSAL::m_length = other.m_length;
         	this = DAL<KeyType, DataType, KeyTypeLess>(other);
         }
-        /// Move constructor
-        // DSAL ( DSAL && );
-        /// Assignment operator
-        DSAL & operator= ( DSAL );
+        DSAL & operator= ( DSAL other){
+        	this->m_length = other.m_length;
+        	this->m_array.reset;
+        	this = DAL<KeyType, DataType, KeyTypeLess>(other);
+        	for(size_t i = 0 ; i < other.m_capacity; i++){
+        		this->m_array[i] = other.m_array[i];
+       		 }
+        }
         /// Move assignment operator
         // DSAL & operator= ( DSAL && );
 
@@ -273,22 +277,20 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         bool remove(const KeyType & _newKey, DataType & _newInfo){
         	if(this->empty())
         		return false; 
+        	size_t pos;
 
-        	for(size_t i = 0 ; i < this->m_length; i++){
-        		if(_newKey == this->m_array[i].first){
-        			_newInfo = this->m_array[i].second;
-        			this->m_array[this->m_length] = {KeyType(), DataType()};
-        			for(size_t j = i ; j < this->m_length ; j++){
-        				this->m_array[j] = this->m_array[j+1];
-        			}
-        			this->m_length--;
-        			return true;
-        		}
-
-        	}
-        	return false;
+       		if(find_index(_newKey, pos)){
+       			_newInfo = this->m_array[pos].second;
+       			for(size_t i = pos; i < this->m_length ; i++){
+       				this->m_array[i] = this->m_array[i + 1];
+       			}
+       			this->m_length--;
+       			return true;
+       		}else{
+        		return false;
+       		}
         }
-        bool insert(const KeyType & _newKey, const DataType & _newInfo){
+      bool insert(const KeyType & _newKey, const DataType & _newInfo){
         	KeyTypeLess teste;
         	//VERIFICANDO SE ESTA CHEIO
         	if(this->m_length == this->m_capacity){
@@ -308,20 +310,23 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         		}
         	}
         	//COMO NAO EXISTE, IREMOS INSERIR NO SEU DEVIDO LUGAR
-        	for(size_t i = this->m_length - 1; i >= 0; --i){
-        		if(teste(this->m_array[i].first, _newKey)){
+        	for(size_t i = 0 ; i < this->m_length; ++i){
+        		if(teste(_newKey, this->m_array[i].first)){
         			for(size_t j = this->m_length; j > i;j--){
         				this->m_array[j] = this->m_array[j-1];
-
         			}
-        			this->m_array[i + 1] = {_newKey, _newInfo};
+        			this->m_array[i] = {_newKey, _newInfo};
         			this->m_length++;
         			return true;
         		}
 
         	}
+        	this->m_array[this->m_length] = {_newKey, _newInfo};
+        	this->m_length++;
+        	return true;
         		
         }
+        		
 
 
        

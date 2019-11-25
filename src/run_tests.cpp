@@ -514,11 +514,12 @@ int main ( void )
         auto test_id{ "MinMaxBasic" };
         REGISTER( tm2, test_id, "Testing basic use of min/max.");
         // insert all itens first.
-        std::cout<<"AQUI" << std::endl;
         for ( const auto & e : table )
         {
             EXPECT_TRUE( tm2, test_id, dict.insert( e.key, e.data ) ) ;
-            
+            std::cout<<  "MIN = "<< dict.min() << std::endl;
+            std::cout << "Max = " <<dict.max() << std::endl;
+                    
         
         }
 
