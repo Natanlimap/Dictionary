@@ -254,6 +254,17 @@ class DSAL : public DAL< KeyType, DataType, KeyTypeLess >
         /// Move assignment operator
 
         //=== modifiers overwritten methods.
+        bool search (const KeyType & key, DataType & data) const{
+   			if(this->empty()){
+   				return false;
+   			}
+   			size_t search = 0;
+        		if(find_index(key, search)){
+        			data = this->m_array[search].second;
+        			return true;
+        	}
+        	return false;
+        }
         bool remove(const KeyType & _newKey, DataType & _newInfo){
         	if(this->empty())
         		return false; 
